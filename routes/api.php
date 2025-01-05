@@ -38,7 +38,7 @@ Route::prefix("mention/{mention}")->group(function () {
 // Promotions
 Route::resource("promotions", PromotionController::class)->except(["create", "store", "edit"]);
 Route::post("promotion/{promotion}/ajouter-frais-academique", [PromotionController::class, "addFraisAcademique"]);
-/** @todo Impléménter la logique d'inscription et continuer avec les autres ressources */
+// Étudiants
 Route::resource("etudiants", EtudiantController::class)->except(["create", "edit"]);
 Route::get("etudiant/{matricule}/find", [EtudiantController::class, "find"])->where([
     "matricule" => "[0-9]{1,3}\/[0-9]{1,4}.[0-9]{2,8}"
@@ -47,9 +47,13 @@ Route::get("etudiant/{etudiant}/paiements", [EtudiantController::class, "paiemen
 Route::get("etudiant/{etudiant}/derogations", [EtudiantController::class, "derogations"]);
 Route::post("etudiant/{etudiant}/paiements", [EtudiantController::class, "addPayment"]);
 Route::post("etudiant/{etudiant}/derogations", [EtudiantController::class, "addDerogation"]);
+// Inscriptions
 Route::resource("inscriptions", InscriptionController::class)->only(["update", "index", "show", "destroy"]);
+// Frais académiques
 Route::resource("frais-academiques", FraisAcademiqueController::class);
-Route::resource("paiements", PaiementController::class);
-Route::resource("derogations", DerogationController::class);
 Route::post("promotion-frais-academiques", [FraisAcademiqueController::class, "associerPromotion"]);
 Route::delete("promotion-frais-academiques", [FraisAcademiqueController::class, "supprimerPromotion"]);
+// Paiements
+Route::resource("paiements", PaiementController::class);
+// Dérogations
+Route::resource("derogations", DerogationController::class);

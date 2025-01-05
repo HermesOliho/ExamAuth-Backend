@@ -27,7 +27,15 @@ echo "Certificate generated for IP address: $IP_ADDRESS"
 
 cat $KEY_FILE $CERT_FILE > ./ssl/localhost-bundle.pem
 
+
+# Lancer php artisan serve en arrière-plan
 php artisan serve &
-echo "PHP server started"
-echo "Starting stunnel3..."
+
+# Lancer stunnel3 en arrière-plan
 sudo stunnel3 -f -d 3000 -r 8000 -p ./ssl/localhost-bundle.pem &
+
+# Attendre que l'utilisateur appuie sur Entrée
+read -p "Appuyez sur Entrée pour arrêter les processus..."
+
+# Arrêter les processus
+kill %1 %2

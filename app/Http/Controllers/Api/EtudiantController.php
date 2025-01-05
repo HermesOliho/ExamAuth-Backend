@@ -95,7 +95,7 @@ class EtudiantController extends Controller
         $etudiant->promotion = $derniere_inscription->promotion->nom_promotion;
         $etudiant->annee_academique = $derniere_inscription->annee_academique;
         $etudiant->total_paiement = $etudiant->paiements()->select(DB::raw('SUM(montant) as total'))->first()->total;
-        $etudiant->image_url = Storage::disk("public")->url($etudiant->image_url);
+        $etudiant->image_url = "/storage/" . $etudiant->image_url;
         return $etudiant;
     }
 
