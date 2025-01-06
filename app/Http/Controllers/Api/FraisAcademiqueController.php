@@ -71,9 +71,13 @@ class FraisAcademiqueController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(FraisAcademiques $frais_academiques)
     {
-        //
+        $frais_academiques->delete();
+        return [
+            "message" => "Frais académiques supprimés !",
+            "success" => true
+        ];
     }
 
     public function associerPromotion(Request $request)

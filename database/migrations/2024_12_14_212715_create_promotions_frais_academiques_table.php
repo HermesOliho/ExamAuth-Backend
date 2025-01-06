@@ -17,11 +17,11 @@ return new class extends Migration
             $table->foreignIdFor(Promotion::class)->constrained()->nullOnDelete();
             $table->foreignIdFor(FraisAcademiques::class)->constrained()->nullOnDelete();
             $table->string("annee_academique");
-            $table->unique([
-                "promotion_id_promotion",
-                "frais_academique_id_tranche",
-                "annee_academique"
-            ]);
+            // $table->unique([
+            //     "promotion_id_promotion",
+            //     "frais_academique_id_tranche",
+            //     "annee_academique"
+            // ]);
             $table->timestamps();
         });
     }

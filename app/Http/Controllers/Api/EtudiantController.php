@@ -88,14 +88,33 @@ class EtudiantController extends Controller
     public function find(string $matricule)
     {
         $etudiant = Etudiant::with(["paiements", "derogations"])->where("matricule", $matricule)->first();
+        // Récupérer la dernière inscription
         /** @var Inscription */
         $derniere_inscription = $etudiant->inscriptions()
             ->orderBy("annee_academique", "desc")
             ->first();
         $etudiant->promotion = $derniere_inscription->promotion->nom_promotion;
+        // Récupérer la dernière année académique
         $etudiant->annee_academique = $derniere_inscription->annee_academique;
+        // Récupérer les frais de la promotion
+        $etudiant->frais_promotion = $derniere_inscription->promotion
+            ->frais_academiques()
+            ->where("annee_academique", $etudiant->annee_academique)
+            ->orderBy("created_at", "desc")
+            ->limit(2)
+            ->get();
+        $etudiant->total_frais = $derniere_inscription->promotion
+            ->frais_academiques()
+            ->select(DB::raw("SUM(montant) as total"))
+            ->where("annee_academique", $etudiant->annee_academique)
+            ->limit(2)
+            ->first()->total;
+        // Récupérer le paiement total
         $etudiant->total_paiement = $etudiant->paiements()->select(DB::raw('SUM(montant) as total'))->first()->total;
+        $etudiant->solde_paiment = $etudiant->total_frais - $etudiant->total_paiement;
+        // Corriger l'URL de la photo de l'étudiant
         $etudiant->image_url = "/storage/" . $etudiant->image_url;
+        // Rétourner le résultat
         return $etudiant;
     }
 
